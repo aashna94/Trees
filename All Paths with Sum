@@ -1,0 +1,123 @@
+//
+//  main.cpp
+//  oky
+//
+//  Created by aashna on 20/06/17.
+//  Copyright © 2017 q. All rights reserved.
+//
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <string>
+#include <climits>
+#include <stdio.h>
+#include <string.h>
+#include <cassert>
+#include <algorithm>
+#include <stack>
+#include <map>
+#include <list>
+#include <set>
+#include <math.h>
+
+using namespace std;
+
+struct node
+{
+    int data;
+    node *left, *right;
+}*root=NULL;
+
+void insert(int d)
+{
+    node *p=new node();
+    p->data=d;
+    p->left=NULL;
+    p->right=NULL;
+    if(root==NULL)
+        root=p;
+    else
+    {
+        node *temp=root;
+        node *parent=new node();
+        while (temp!=NULL)
+        {
+            parent=temp;
+            if(d<parent->data)
+                temp=temp->left;
+            else
+                temp=temp->right;
+        }
+        if(d<parent->data)
+            parent->left=p;
+        else
+            parent->right=p;
+    }
+}
+
+void inorder(node *p)
+{
+    if(p==NULL)
+        return;
+    inorder(p->left);
+    cout<<p->data<<" ";
+    inorder(p->right);
+}
+
+void preorder(node *p)
+{
+    if(p==NULL)
+        return;
+    cout<<p->data<<" ";
+    preorder(p->left);
+    preorder(p->right);
+}
+
+int height(node *p)
+{
+    if(p==NULL)
+        return 0;
+    return 1 + max(height(p->left), height(p->right));
+}
+
+
+void pathSum(node *p, int *path, int level)
+{
+    if(p==NULL)
+        return;
+    int i,sum=0;
+    if(p->left==NULL && p->right==NULL)
+    {
+        path[level]=p->data;
+        for (i=0; i<=level; i++)
+        {
+            sum+=path[i];
+            cout<<path[i]<<" ";
+        }
+        cout<<" Sum: "<<sum<<endl;
+    }
+    path[level]=p->data;
+    pathSum(p->left, path, level+1);
+    pathSum(p->right, path, level+1);
+}
+
+int main(int argc, const char * argv[])
+{
+    int ele,n,i,a,b, path[100];
+    cin>>n;
+    for (i=0; i<n ; i++)
+    {
+        cin>>ele;
+        insert(ele);
+    }
+    cout<<"\nInorder: ";
+    inorder(root);
+    cout<<endl;
+  
+    cout<<"\nPath with Sum: ";
+    pathSum(root, path, 0);
+    return 0;
+}
+
