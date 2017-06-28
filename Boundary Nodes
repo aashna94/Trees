@@ -1,0 +1,130 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <string>
+#include <climits>
+#include <stdio.h>
+#include <string.h>
+#include <cassert>
+#include <algorithm>
+#include <stack>
+#include <map>
+#include <list>
+#include <set>
+#include <math.h>
+
+using namespace std;
+
+struct node
+{
+    int data;
+    node *left, *right;
+}*root=NULL;
+
+void insert(int d)
+{
+    node *p=new node();
+    p->data=d;
+    p->left=NULL;
+    p->right=NULL;
+    if(root==NULL)
+        root=p;
+    else
+    {
+        node *temp=root;
+        node *parent=new node();
+        while (temp!=NULL)
+        {
+            parent=temp;
+            if(d<parent->data)
+                temp=temp->left;
+            else
+                temp=temp->right;
+        }
+        if(d<parent->data)
+            parent->left=p;
+        else
+            parent->right=p;
+    }
+}
+
+void inorder(node *p)
+{
+    if(p==NULL)
+        return;
+    inorder(p->left);
+    cout<<p->data<<" ";
+    inorder(p->right);
+}
+
+void printLeaves(node *p)
+{
+    if(p==NULL)
+        return;
+    printLeaves(p->left);
+    if(p->left==NULL && p->right==NULL)
+        cout<<p->data<<" ";
+    printLeaves(p->right);
+}
+
+void printLeft(node *p)
+{
+    if(p==NULL)
+        return;
+    if (p->left)
+    {
+        cout<<p->data<<" ";
+        printLeft(p->left);
+    }
+    else if(p->right)
+    {
+        cout<<p->data<<" ";
+        printLeft(p->right);
+    }
+}
+
+void printRight(node *p)
+{
+    if(p==NULL)
+        return;
+    if(p->right)
+    {
+        printRight(p->right);
+         cout<<p->data<<" ";
+    }
+    else if (p->left)
+    {
+        printRight(p->left);
+         cout<<p->data<<" ";
+    }
+}
+
+void printBoundary(node *p)
+{
+    if(p==NULL)
+        return;
+     cout<<p->data<<" ";
+    printLeft(p->left);
+    printLeaves(p->left);
+    printLeaves(p->right);
+    printRight(p->right);
+}
+
+
+int main(int argc, const char * argv[])
+{
+    int ele,n,i;
+    cin>>n;
+    for (i=0; i<n ; i++)
+    {
+        cin>>ele;
+        insert(ele);
+    }
+    cout<<"\nInorder: ";
+    inorder(root);
+    cout<<"\nBoundary Nodes: ";
+    printBoundary(root);
+    return 0;
+}
+
